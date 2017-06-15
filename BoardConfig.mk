@@ -36,6 +36,11 @@ BOARD_GLOBAL_CFLAGS += -DBATTERY_REAL_INFO
 
 USE_LOCAL_GNSSPPS := true
 
+# Inventor
+# USE_GPU_FOR_BUILDS := true
+STRICT_ALIASING := true
+GRAPHITE_OPTS := true
+
 # Assertions
 TARGET_BOARD_INFO_FILE ?= $(PLATFORM_PATH)/board-info.txt
 TARGET_OTA_ASSERT_DEVICE := OnePlus3,oneplus3,OnePlus3T,oneplus3t
