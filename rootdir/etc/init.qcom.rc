@@ -1054,46 +1054,16 @@ service poweroffhandler /system/bin/poweroffhandler
     disabled
     oneshot
 
-# such color
-on property:sys.rainbow.recovery=1
-    write /sys/class/leds/red/brightness 255
-    write /sys/class/leds/red/start_idx 0
-    write /sys/class/leds/red/duty_pcts "100,100,100,0,0,50,100"
-    write /sys/class/leds/red/pause_hi 0
-    write /sys/class/leds/red/pause_lo 0
-    write /sys/class/leds/red/ramp_step_ms 100
-    write /sys/class/leds/green/brightness 255
-    write /sys/class/leds/green/start_idx 7
-    write /sys/class/leds/green/duty_pcts "0,50,100,100,0,0,0"
-    write /sys/class/leds/green/pause_hi 0
-    write /sys/class/leds/green/pause_lo 0
-    write /sys/class/leds/green/ramp_step_ms 100
-    write /sys/class/leds/blue/brightness 255
-    write /sys/class/leds/blue/start_idx 14
-    write /sys/class/leds/blue/duty_pcts "0,0,0,0,100,100,100"
-    write /sys/class/leds/blue/pause_hi 0
-    write /sys/class/leds/blue/pause_lo 0
-    write /sys/class/leds/blue/ramp_step_ms 100
-    write /sys/class/leds/rgb/rgb_blink 1
+# Logcat dump daemon, dumps logs to logdump partition
+service logdumpd /system/bin/logcat -b all -v threadtime -D -w /dev/block/bootdevice/by-name/logdump
+    class core
+    writepid /dev/cpuset/system-background/tasks
+    seclabel u:r:logdumpd:s0
+    disabled
 
-on property:sys.rainbow.recovery=0
-    write /sys/class/leds/rgb/rgb_blink 0
-
-# happy dance!
-on post-fs-data
-    write /sys/class/leds/rgb/rgb_blink 0
-    write /sys/class/leds/blue/blink 0
-    write /sys/class/leds/red/blink 0
-    write /sys/class/leds/rgb/rgb_blink 0
-    write /sys/class/leds/blue/brightness 255
-    write /sys/class/leds/green/brightness 255
-    write /sys/class/leds/red/brightness 0
-    write /sys/class/leds/green/start_idx 0
-    write /sys/class/leds/green/pause_hi 0
-    write /sys/class/leds/green/pause_lo 0
-    write /sys/class/leds/green/ramp_step_ms 50
-    write /sys/class/leds/green/duty_pcts "16,25,33,41,50,58,66,74,83,91,100"
-    write /sys/class/leds/green/blink 1
+# Logdumpd is enabled only for userdebug non-perf build
+on property:ro.logdumpd.enabled=1
+    start logdumpd
 
 service time_daemon /system/bin/time_daemon
     class main
