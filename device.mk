@@ -316,5 +316,9 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/wifi/WCNSS_qcom_cfg.ini:system/etc/wifi/WCNSS_qcom_cfg.ini
 
+# Miracast support
+PRODUCT_PROPERTY_OVERRIDES += \
+    persist.debug.wfd.enable=1
+
 # Inherit from oppo-common
 $(call inherit-product, device/oppo/common/common.mk)
